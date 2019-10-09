@@ -18,6 +18,16 @@ public class Screen {
 		this.width = width;
 		this.height = height;
 		
+		//Manually setting colors 
+		
+		for(int i = 0; i < 4; i++) {
+			int[][] grassColors = {{40, 224, 16}, {18, 130, 12}};
+			sheet.setColors(i, grassColors);
+		}
+		
+		int[][] flowerColors = {{40, 224, 16},{250, 0, 117},{238, 242, 17}, {0,0,0}};
+		sheet.setColors(33, flowerColors);
+		
 		pixels = new int[width*height];
 		tiles = new int[width*height];
 		setTiles();
@@ -31,7 +41,13 @@ public class Screen {
 		for (int i = 0; i < tiles.length; i++) {
 			tiles[i] = random.nextInt(4);
 		}
+		for (int i = 0; i < tiles.length; i++) {
+			if(random.nextInt(100) % 7 == 0) {
+				tiles[i] = 33;
+			}
+		}
 	}
+
 	
 	public void render() {
 		int tileIndex = 0;
