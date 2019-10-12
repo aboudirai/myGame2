@@ -22,6 +22,8 @@ public class Game extends Canvas implements Runnable {
 	public static final int HEIGHT = 120;
 	public static final int SCALE = 4;
 	public boolean running = false;
+	public int xScroll = 0;
+	public int yScroll = 0;
 	
 	private BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 	private int[] pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
@@ -49,10 +51,14 @@ public class Game extends Canvas implements Runnable {
 	
 	public void run() {
 		init();
-		
 		while(running) {
+			System.out.println(xScroll);
 			render();
+			tick();
 		}
+	}
+	
+	public void tick() {
 	}
 	
 	public void render() {

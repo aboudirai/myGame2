@@ -11,13 +11,16 @@ public class Screen {
 	private static final int TILE_COUNT = 32;
 	private static final int TILE_WIDTH = 8;
 	private static final int SHEET_WIDTH = 256;
+	private static final int MAP_SCALE = 8;
+	private int mapWidth;
 	private Random random = new Random();
+	private int xScroll = 0;
 	
 	public Screen(int width, int height, SpriteSheet sheet) {
 		this.sheet = sheet;
 		this.width = width;
 		this.height = height;
-		
+		this.mapWidth = MAP_SCALE * width;
 		//Manually setting colors 
 		
 		for(int i = 0; i < 4; i++) {
@@ -29,7 +32,7 @@ public class Screen {
 		sheet.setColors(33, flowerColors);
 		
 		pixels = new int[width*height];
-		tiles = new int[width*height];
+		tiles = new int[(mapWidth) * (mapWidth)]; //each element represents 8x8p tile
 		setTiles();
 	}
 
@@ -50,18 +53,20 @@ public class Screen {
 
 	
 	public void render() {
-		int tileIndex = 0;
+		int i = 0;
+		int tileIndex = ((int)(i/32) + 1)*(i % 32) + (((mapWidth - width) / 2) / TILE_WIDTH); //****TILE INDEX IS WHAT HAS TO BE SET IN THE CENTER OF THE MAP -- xTile AND yTile REPRESENT TILES ON THE SCREEN
 		for(int yTile = 0; yTile < height; yTile += 8) {
 			for(int xTile = 0; xTile < width; xTile += 8) {
-				render(xTile, yTile, tiles[tileIndex++]); //Create tile arr
+				tileIndex = ((int)(i/32) + 1)*(i % 32) + (((mapWidth - width) / 2) / TILE_WIDTH);
+				render(xTile, yTile, tiles[tileIndex]); //Create tile arr
+				i++;
 			}
 		}
+		xScroll++;
 		
 	}
 	
-	//loop with increments of 1 pixel
-	//create color function that changes color of sprite sheet depending on order of colors
-			//that appear when scrubbing through tile
+
 	public void render(int x0, int y0, int tile) {
 		int tileX = tile % 32;
 		int tileY = tile / 32;
