@@ -24,7 +24,7 @@ public class Screen {
 		//Manually setting colors 
 		
 		for(int i = 0; i < 4; i++) {
-			int[][] grassColors = {{40, 224, 16}, {18, 130, 12}};
+			int[][] grassColors = {{40, 224, 16}, {36, 181, 50}};
 			sheet.setColors(i, grassColors);
 		}
 		
@@ -45,7 +45,7 @@ public class Screen {
 			tiles[i] = random.nextInt(4);
 		}
 		for (int i = 0; i < tiles.length; i++) {
-			if(random.nextInt(100) % 7 == 0) {
+			if(random.nextInt(20) == 2) {
 				tiles[i] = 33;
 			}
 		}
@@ -66,14 +66,16 @@ public class Screen {
 		
 	}
 	
-
+	//CREATE NEW ARRAY - mapPixels - that has the entire map drawn. Movement just shifts this arr and sets it to the screen pixels
+	
 	public void render(int x0, int y0, int tile) {
 		int tileX = tile % 32;
 		int tileY = tile / 32;
 		for(int y = y0; y < (y0 + 8); y++) {
 			for(int x = x0; x < (x0 + 8); x++) {
+				//if (x + y * width < pixels.length - 1) {
 				pixels[x + y * width] = sheet.pixels[((tileX * TILE_WIDTH) + (x - x0)) + (SHEET_WIDTH * ((tileY * TILE_WIDTH) + (y - y0)))];
-				//pixels[x + y * width] = sheet.pixels[380];
+				
 			} 
 		}
 	}
