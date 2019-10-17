@@ -18,7 +18,8 @@ public class Game extends Canvas implements Runnable {
 	public static final long serialVersionUID = 1L;
 	
 	public static final String NAME = "Untitled Game";
-	public static final int WIDTH = 160;
+	public static final int WIDTH = 160
+			;
 	public static final int HEIGHT = 120;
 	public static final int SCALE = 4;
 	public boolean running = false;
@@ -28,12 +29,11 @@ public class Game extends Canvas implements Runnable {
 	private BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 	private int[] pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
 	private Screen screen;
+	private InputHandler input = new InputHandler(this);
 	
 	public void start() {
 		running = true;
-		System.out.println("here1");
 		new Thread(this).start();
-		System.out.println("here2");
 	}
 	
 	public void stop() {
@@ -52,9 +52,13 @@ public class Game extends Canvas implements Runnable {
 	public void run() {
 		init();
 		while(running) {
-			System.out.println(xScroll);
 			render();
 			tick();
+			try {
+				Thread.sleep(6);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -68,6 +72,19 @@ public class Game extends Canvas implements Runnable {
 			createBufferStrategy(3);
 			requestFocus();
 			return;
+		}
+		
+		if (input.up) {
+			screen.yScroll--;
+		}
+		if (input.down) {
+			screen.yScroll++;
+		}
+		if (input.right) {
+			screen.xScroll++;
+		}
+		if (input.left) {
+			screen.xScroll--;
 		}
 		
 		screen.render();
