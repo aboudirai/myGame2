@@ -40,7 +40,7 @@ public class SpriteSheet {
 	public void setColors(int tile, int[][] colors) {
 		int[] originalColors = new int[colors.length];
 		int[] newColors = new int[colors.length];
-		int red, green, blue;
+		int alpha, red, green, blue;
 		int[] tempColor;
 		//Converting RGB to bitwise
 		for (int i = 0; i < colors.length; i++) {
@@ -50,8 +50,7 @@ public class SpriteSheet {
 	    	green = tempColor[1] << 8;
 	    	blue = tempColor[2];
 			
-			
-			if (red == -1 && green == -1 && blue == -1) {
+			if (tempColor[0] == -1 && tempColor[1] == -1 && tempColor[2] == -1) {
 				newColors[i] = -1;
 			}
 			else {
@@ -66,26 +65,13 @@ public class SpriteSheet {
 			for(int x = pixelX; x < (pixelX + 8); x++) {
 				int currColor = pixels[x + y * SHEET_WIDTH];
 				int colorIndex = checkInList(currColor, originalColors);
+				
 				if (colorIndex < 0) { //Add the new color to the list
 					originalColors[inc] = currColor;
 					pixels[x + y * SHEET_WIDTH] = newColors[inc++];
-					/*if(newColors[inc] == -1) {
-						pixels[x + y * SHEET_WIDTH] &= 0xFFFFFF;
-						inc++;
-					}
-					else{
-						pixels[x + y * SHEET_WIDTH] = newColors[inc++];
-					}*/
-					
 				}
 				else {
-					pixels[x + y * SHEET_WIDTH] = newColors[colorIndex];
-					/*if(newColors[colorIndex] < 0) {
-						pixels[x + y * SHEET_WIDTH] &= 0xFFFFFF;
-					}
-					else {
-						pixels[x + y * SHEET_WIDTH] = newColors[colorIndex];
-					}*/
+					pixels[x + y * SHEET_WIDTH] = newColors[colorIndex];			
 				}
 				
 			}

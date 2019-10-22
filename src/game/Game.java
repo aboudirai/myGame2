@@ -23,6 +23,7 @@ public class Game extends Canvas implements Runnable {
 	public static final int HEIGHT = 120;
 	public static final int SCALE = 4;
 	public boolean running = false;
+	public int ticks;
 	public int xScroll = 0;
 	public int yScroll = 0;
 	
@@ -50,14 +51,32 @@ public class Game extends Canvas implements Runnable {
 	}
 	
 	public void run() {
+		double bufferTime = 0;
+		double nsPerTick = 1000000000.0 / 60;
+		long time0 = System.nanoTime();
+		ticks = 0;
 		init();
+		
 		while(running) {
+			boolean shouldRender = true;
+			long time1 = System.nanoTime();
+			bufferTime += (time1 - time0) / nsPerTick;
 			render();
+			ticks++;
 			tick();
+			
+			while(bufferTime >= 1) {
+				bufferTime -= 1;
+			}
+			
 			try {
-				Thread.sleep(6);
+				Thread.sleep(3);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
+			}
+			
+			if (shouldRender) {
+				render();
 			}
 		}
 	}
@@ -73,20 +92,20 @@ public class Game extends Canvas implements Runnable {
 			requestFocus();
 			return;
 		}
-		
-		if (input.up) {
-			screen.yScroll--;
+		if (ticks % 3 == 0) { //slows down motion
+			if (input.up) {
+				screen.yScroll--;
+			}
+			if (input.down) {
+				screen.yScroll++;
+			}
+			if (input.right) {
+				screen.xScroll++;
+			}
+			if (input.left) {
+				screen.xScroll--;
+			}
 		}
-		if (input.down) {
-			screen.yScroll++;
-		}
-		if (input.right) {
-			screen.xScroll++;
-		}
-		if (input.left) {
-			screen.xScroll--;
-		}
-		
 		screen.render();
 		
 		for (int y = 0; y < screen.height; y++) {
@@ -94,7 +113,6 @@ public class Game extends Canvas implements Runnable {
 				pixels[x + y * WIDTH] = screen.pixels[x + y * screen.width];
 			}
 		}
-		
 		
 		
 		Graphics g = bs.getDrawGraphics();
@@ -122,7 +140,6 @@ public class Game extends Canvas implements Runnable {
 		frame.setResizable(false);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
-		System.out.println("here");
 		game.start();
 	}
 

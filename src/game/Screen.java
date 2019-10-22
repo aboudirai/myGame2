@@ -26,15 +26,28 @@ public class Screen {
 		this.mapWidth = MAP_SCALE * width;
 		//Manually setting colors 
 		
+		
+		//IMPLEMENTED ARGB TRANSPARENCY// POTENTIALLY REMOVE FROM SpriteSheet.setColors and BufferedImage init
+		
+		
 		for(int i = 0; i < 4; i++) {
 			int[][] grassColors = {{40, 224, 16}, {36, 181, 50}};
 			sheet.setColors(i, grassColors);
+		}
+	
+		for(int y = 5; y < 7; y++) {
+			for(int x = 0; x < 8; x++) {
+				int[][] gatorColors = {{-1, -1, -1}, {35, 49, 196}, {55, 255, 255}, {35, 49, 196}};
+				sheet.setColors(y * TILE_COUNT + x , gatorColors);
+			}
 		}
 		
 		int[][] flowerColors = {{40, 224, 16},{250, 0, 117},{238, 242, 17}, {0,0,0}};
 		sheet.setColors(33, flowerColors);
 		
-		pixels = new int[width*height];
+		
+		
+		pixels = new int[width * height];
 		tiles = new int[(mapWidth) * (mapWidth)]; //each element represents 8x8p tile
 		mapPixels = new int[tiles.length * 8 * 8];
 		mapPixelsWidth =  mapWidth*8;
@@ -90,8 +103,9 @@ public class Screen {
 	}
 	*/
 	
+	//AYYYYYYYYY move the renderSprite functionality inside the (Gator / Character) Class
+	
 	//just cuz ur here, lemme say u should add powerups on the ground that make you faster
-	//mapPixels has been initialized -- now render should be shifting mapPixels and sets it to the screen pixels
 	//need to draw out the dimensions of tiles[] and mapPixels[] cuz its hard to be sure the width is legit
 	public void render(int x0, int y0) {
 		for(int y = 0; y < height; y++) {
@@ -99,20 +113,33 @@ public class Screen {
 				pixels[x + y * width] = mapPixels[(x + x0 + xScroll) + (y + y0 + yScroll) * mapPixelsWidth];
 			} 
 		}
+		
+		//Rendering Gator
+		int centerX = width / 2 - 8;
+		int centerY = height / 2 - 8;
+		renderSprite(centerX, centerY, 5 * TILE_COUNT);
+		renderSprite(centerX + 8, centerY, 5 * TILE_COUNT + 1);
+		renderSprite(centerX, centerY + 8, 6 * TILE_COUNT);
+		renderSprite(centerX + 8, centerY + 8, 6 * TILE_COUNT + 1);
+		
 	}
-	/*
-	public void render(int x0, int y0, int tile) {
+	
+	public void renderSprite(int x0, int y0, int tile) {
 		int tileX = tile % 32;
 		int tileY = tile / 32;
+		int sheetPixel;
 		for(int y = y0; y < (y0 + 8); y++) {
 			for(int x = x0; x < (x0 + 8); x++) {
 				//if (x + y * width < pixels.length - 1) {
-				pixels[x + y * width] = sheet.pixels[((tileX * TILE_WIDTH) + (x - x0)) + (SHEET_WIDTH * ((tileY * TILE_WIDTH) + (y - y0)))];
+				sheetPixel = sheet.pixels[((tileX * TILE_WIDTH) + (x - x0)) + (SHEET_WIDTH * ((tileY * TILE_WIDTH) + (y - y0)))];
+				if (sheetPixel != -1) { //handling transparency
+					pixels[x + y * width] = sheetPixel;
+				}
 				
 			} 
 		}
 	}
-	*/
+	
 	
 	
 	public void renderMap(int x0, int y0, int tile) {
