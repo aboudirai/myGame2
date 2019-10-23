@@ -70,7 +70,7 @@ public class Game extends Canvas implements Runnable {
 			}
 			
 			try {
-				Thread.sleep(3);
+				Thread.sleep(4);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

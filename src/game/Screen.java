@@ -2,6 +2,10 @@ package game;
 
 import java.util.Random;
 
+import game.sprites.Gator;
+import game.tiles.FlowerTile;
+import game.tiles.GrassTile;
+
 public class Screen {
 
 	public final int width, height;
@@ -19,52 +23,70 @@ public class Screen {
 	protected int xScroll = 0;
 	protected int yScroll = 0;
 	
+	//Create World Generator Class
+	public GrassTile grass;
+	public FlowerTile flower;
+	public Gator gator;
+	
 	public Screen(int width, int height, SpriteSheet sheet) {
 		this.sheet = sheet;
 		this.width = width;
 		this.height = height;
 		this.mapWidth = MAP_SCALE * width;
+		grass = new GrassTile(sheet);
+		flower = new FlowerTile(sheet);
+		gator = new Gator(sheet);
+		
 		//Manually setting colors 
 		
 		
 		//IMPLEMENTED ARGB TRANSPARENCY// POTENTIALLY REMOVE FROM SpriteSheet.setColors and BufferedImage init
 		
 		
-		for(int i = 0; i < 4; i++) {
-			int[][] grassColors = {{40, 224, 16}, {36, 181, 50}};
+		/*for(int i = 0; i < 4; i++) {
+			int[][] grassColors = {{0, 204, 102}, {36, 181, 50}};
 			sheet.setColors(i, grassColors);
-		}
-	
+		}*/
+		
+		
+		/* IMPLEMENT GROUP COLORING SQUARES
 		for(int y = 5; y < 7; y++) {
 			for(int x = 0; x < 8; x++) {
-				int[][] gatorColors = {{-1, -1, -1}, {35, 49, 196}, {55, 255, 255}, {35, 49, 196}};
+				int[][] gatorColors = {{-1, -1, -1}, {35, 49, 196}, {0,0,0}, {35, 49, 196}};
 				sheet.setColors(y * TILE_COUNT + x , gatorColors);
 			}
 		}
-		
-		int[][] flowerColors = {{40, 224, 16},{250, 0, 117},{238, 242, 17}, {0,0,0}};
-		sheet.setColors(33, flowerColors);
-		
+		*/
+		/*
+		int[][] gatorColors = {{-1, -1, -1}, {35, 49, 220}, {0,0,0}, {35, 49, 220}};
+		sheet.setColors(5 * TILE_COUNT, gatorColors);
+		int[][] gatorColors1 = {{-1, -1, -1}, {35, 49, 220}, {0,0,0}, {35, 49, 220}};
+		sheet.setColors(5 * TILE_COUNT + 1, gatorColors1);
+		int[][] gatorColors2 = {{-1, -1, -1}, {35, 49, 220}, {255,255,0}, {0, 0, 0}};
+		sheet.setColors(6 * TILE_COUNT, gatorColors2);
+		int[][] gatorColors3 = {{255,255,255}, {-1, -1, -1}, {0,0,0}, {35, 49, 220}};
+		sheet.setColors(6 * TILE_COUNT + 1, gatorColors3);
+		*/
 		
 		
 		pixels = new int[width * height];
 		tiles = new int[(mapWidth) * (mapWidth)]; //each element represents 8x8p tile
 		mapPixels = new int[tiles.length * 8 * 8];
 		mapPixelsWidth =  mapWidth*8;
-		setTiles();
+		setRandomTiles();
 	}
 
 	//this render only narrows it down to the tile
 	//loop with increments of TILE_WIDTH
 	//
 	
-	public void setTiles(){
+	public void setRandomTiles(){
 		for (int i = 0; i < tiles.length; i++) {
-			tiles[i] = random.nextInt(4);
+			tiles[i] = grass.getTile();
 		}
 		for (int i = 0; i < tiles.length; i++) {
 			if(random.nextInt(20) == 2) {
-				tiles[i] = 33;
+				tiles[i] = flower.getTile();
 			}
 		}
 		
@@ -87,21 +109,6 @@ public class Screen {
 		render(renderStartX, renderStartY);
 	}
 	
-	/*
-	public void render() {
-		int i = 0;
-		int tileIndex = ((int)(i/32) + 1)*(i % 32) + (((mapWidth - width) / 2) / TILE_WIDTH); //****TILE INDEX IS WHAT HAS TO BE SET IN THE CENTER OF THE MAP -- xTile AND yTile REPRESENT TILES ON THE SCREEN
-		for(int yTile = 0; yTile < height; yTile += 8) {
-			for(int xTile = 0; xTile < width; xTile += 8) {
-				tileIndex = ((int)(i/32) + 1)*(i % 32) + (((mapWidth - width) / 2) / TILE_WIDTH);
-				render(xTile, yTile, tiles[tileIndex]); //Create tile arr
-				i++;
-			}
-		}
-		xScroll++;
-		
-	}
-	*/
 	
 	//AYYYYYYYYY move the renderSprite functionality inside the (Gator / Character) Class
 	
@@ -117,13 +124,12 @@ public class Screen {
 		//Rendering Gator
 		int centerX = width / 2 - 8;
 		int centerY = height / 2 - 8;
-		renderSprite(centerX, centerY, 5 * TILE_COUNT);
-		renderSprite(centerX + 8, centerY, 5 * TILE_COUNT + 1);
-		renderSprite(centerX, centerY + 8, 6 * TILE_COUNT);
-		renderSprite(centerX + 8, centerY + 8, 6 * TILE_COUNT + 1);
+		
+		gator.renderSprite(pixels, centerX, centerY, xScroll, yScroll);
 		
 	}
 	
+	/*
 	public void renderSprite(int x0, int y0, int tile) {
 		int tileX = tile % 32;
 		int tileY = tile / 32;
@@ -139,6 +145,7 @@ public class Screen {
 			} 
 		}
 	}
+	*/
 	
 	
 	
