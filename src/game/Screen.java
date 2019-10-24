@@ -3,7 +3,7 @@ package game;
 import java.util.Random;
 
 import game.sprites.Gator;
-import game.tiles.FlowerTile;
+import game.tiles.DirtTile;
 import game.tiles.GrassTile;
 
 public class Screen {
@@ -16,16 +16,17 @@ public class Screen {
 	private static final int TILE_COUNT = 32;
 	private static final int TILE_WIDTH = 8;
 	private static final int SHEET_WIDTH = 256;
-	private static final int MAP_SCALE = 8;
+	private static final int MAP_SCALE = 1;
 	private int mapWidth;
 	private int mapPixelsWidth;
 	private Random random = new Random();
 	protected int xScroll = 0;
 	protected int yScroll = 0;
+	protected int dir = 2;
 	
 	//Create World Generator Class
 	public GrassTile grass;
-	public FlowerTile flower;
+	public DirtTile dirt;
 	public Gator gator;
 	
 	public Screen(int width, int height, SpriteSheet sheet) {
@@ -34,38 +35,16 @@ public class Screen {
 		this.height = height;
 		this.mapWidth = MAP_SCALE * width;
 		grass = new GrassTile(sheet);
-		flower = new FlowerTile(sheet);
+		dirt = new DirtTile(sheet);
 		gator = new Gator(sheet);
 		
-		//Manually setting colors 
-		
-		
-		//IMPLEMENTED ARGB TRANSPARENCY// POTENTIALLY REMOVE FROM SpriteSheet.setColors and BufferedImage init
-		
-		
-		/*for(int i = 0; i < 4; i++) {
-			int[][] grassColors = {{0, 204, 102}, {36, 181, 50}};
-			sheet.setColors(i, grassColors);
-		}*/
-		
-		
-		/* IMPLEMENT GROUP COLORING SQUARES
+		/*
 		for(int y = 5; y < 7; y++) {
 			for(int x = 0; x < 8; x++) {
 				int[][] gatorColors = {{-1, -1, -1}, {35, 49, 196}, {0,0,0}, {35, 49, 196}};
 				sheet.setColors(y * TILE_COUNT + x , gatorColors);
 			}
 		}
-		*/
-		/*
-		int[][] gatorColors = {{-1, -1, -1}, {35, 49, 220}, {0,0,0}, {35, 49, 220}};
-		sheet.setColors(5 * TILE_COUNT, gatorColors);
-		int[][] gatorColors1 = {{-1, -1, -1}, {35, 49, 220}, {0,0,0}, {35, 49, 220}};
-		sheet.setColors(5 * TILE_COUNT + 1, gatorColors1);
-		int[][] gatorColors2 = {{-1, -1, -1}, {35, 49, 220}, {255,255,0}, {0, 0, 0}};
-		sheet.setColors(6 * TILE_COUNT, gatorColors2);
-		int[][] gatorColors3 = {{255,255,255}, {-1, -1, -1}, {0,0,0}, {35, 49, 220}};
-		sheet.setColors(6 * TILE_COUNT + 1, gatorColors3);
 		*/
 		
 		
@@ -86,7 +65,7 @@ public class Screen {
 		}
 		for (int i = 0; i < tiles.length; i++) {
 			if(random.nextInt(20) == 2) {
-				tiles[i] = flower.getTile();
+				tiles[i] = dirt.getTile();
 			}
 		}
 		
@@ -125,7 +104,7 @@ public class Screen {
 		int centerX = width / 2 - 8;
 		int centerY = height / 2 - 8;
 		
-		gator.renderSprite(pixels, centerX, centerY, xScroll, yScroll);
+		gator.renderSprite(pixels, centerX, centerY, xScroll, yScroll, dir);
 		
 	}
 	

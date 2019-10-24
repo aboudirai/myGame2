@@ -70,11 +70,10 @@ public class Game extends Canvas implements Runnable {
 			}
 			
 			try {
-				Thread.sleep(4);
+				Thread.sleep(5);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			
 			if (shouldRender) {
 				render();
 			}
@@ -92,18 +91,22 @@ public class Game extends Canvas implements Runnable {
 			requestFocus();
 			return;
 		}
-		if (ticks % 3 == 0) { //slows down motion
+		if (ticks % 4 == 0) { //slows down motion
 			if (input.up) {
 				screen.yScroll--;
+				screen.dir = 0;
 			}
 			if (input.down) {
 				screen.yScroll++;
+				screen.dir = 2;
 			}
 			if (input.right) {
 				screen.xScroll++;
+				screen.dir = 1;
 			}
 			if (input.left) {
 				screen.xScroll--;
+				screen.dir = 3;
 			}
 		}
 		screen.render();

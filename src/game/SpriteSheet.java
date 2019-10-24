@@ -78,7 +78,7 @@ public class SpriteSheet {
 		}
 	}
 	//Sprites more than one tile big
-	public void setColors(int tiles[], int[][] colors, int spriteWidth, int spriteHeight) {
+	public void setColors(int tiles[], int[][] colors, int spriteBlockWidth, int spriteBlockHeight) {
 		int[] originalColors = new int[colors.length];
 		int[] newColors = new int[colors.length];
 		int red, green, blue;
@@ -100,10 +100,10 @@ public class SpriteSheet {
 			
 		}
 		int inc = 0;
-		int pixelX = (tiles[0] % 32) * 8;
-		int pixelY = (tiles[0] / 32) * 8;
-		for(int y = pixelY; y < (pixelY + (TILE_WIDTH * spriteHeight)); y++) {
-			for(int x = pixelX; x < (pixelX + TILE_WIDTH * spriteWidth); x++) {
+		int pixelX = (tiles[0] % TILE_COUNT) * 8;
+		int pixelY = (tiles[0] / TILE_COUNT) * 8;
+		for(int y = pixelY; y < (pixelY + (TILE_WIDTH * spriteBlockHeight)); y++) {
+			for(int x = pixelX; x < (pixelX + TILE_WIDTH * spriteBlockWidth); x++) {
 				int currColor = pixels[x + y * SHEET_WIDTH];
 				int colorIndex = checkInList(currColor, originalColors);
 				

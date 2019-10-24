@@ -16,7 +16,9 @@ public class GrassTile extends Tile {
 	
 	@Override
 	public void setColors() {
-		sheet.setColors(tiles, colors, 4, 1);
+		for(int i = 0; i < tiles.length; i++) {
+			sheet.setColors(tiles[i], colors);
+		}
 		
 	}
 	
