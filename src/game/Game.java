@@ -13,6 +13,8 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
+import game.sprites.Tiger;
+
 public class Game extends Canvas implements Runnable {
 
 	public static final long serialVersionUID = 1L;
@@ -26,6 +28,8 @@ public class Game extends Canvas implements Runnable {
 	public int ticks;
 	public int xScroll = 0;
 	public int yScroll = 0;
+	
+	public Tiger tiger;
 	
 	private BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 	private int[] pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
@@ -42,12 +46,13 @@ public class Game extends Canvas implements Runnable {
 	}
 	
 	public void init() {
-		
 		try {
 			screen = new Screen(WIDTH, HEIGHT, new SpriteSheet(ImageIO.read(Game.class.getResourceAsStream("/resources/textureMap.png"))));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		//tiger.generateSprite();
 	}
 	
 	public void run() {
@@ -70,7 +75,7 @@ public class Game extends Canvas implements Runnable {
 			}
 			
 			try {
-				Thread.sleep(5);
+				Thread.sleep(4);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

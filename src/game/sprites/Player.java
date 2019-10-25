@@ -1,62 +1,13 @@
 package game.sprites;
 
-import java.util.Random;
-
 import game.SpriteSheet;
 
-public class Sprite {
+public class Player extends Sprite {
+
+	public Player(SpriteSheet sheet, int[] tiles, int[][] colors, int spriteWidth, int spriteHeight) {
+		super(sheet, tiles, colors, spriteWidth, spriteHeight);
+	}
 	
-	public static final int TILE_WIDTH = 8;
-	public static final int TILE_COUNT = 32;
-	public static final int SCREEN_WIDTH = 160;
-	public static final int SCREEN_HEIGHT = 120;
-	public int[] tiles;
-	public int[][] spriteStates = new int[8][4]; // used for sprite animation
-	public int spriteState; // current state in SpriteStates sprite is in
-
-	public int[][] colors;
-	public int spriteWidth;
-	public int spriteHeight;
-	public int direction = 2;
-	public SpriteSheet sheet;
-	public Random random = new Random();
-
-	public Sprite(SpriteSheet sheet, int[] tiles, int[][] colors, int spriteWidth, int spriteHeight) {
-		this.tiles = tiles;
-		this.colors = colors;
-		this.sheet = sheet;
-		this.spriteState = 0;
-		this.spriteWidth = spriteWidth;
-		this.spriteHeight = spriteHeight;		
-		initSpriteStates(tiles[0]);
-		setColors();
-
-	}
-
-	public void initSpriteStates(int startTile) {
-		int i = 0;
-		spriteStates[i] = tiles;
-		for (int y = 0; y < 2; y++) {
-			for (int x = 0; x < 4; x++) {
-				int[] tempArr = new int[4];
-				for (int j = 0; j < tempArr.length; j++){
-					tempArr[j] = spriteStates[0][j] + (x * 2) + (y * TILE_COUNT * 2);
-				}
-				spriteStates[i++] = tempArr;
-			}
-		}
-	}
-
-	public void setColors() {
-		sheet.setColors(spriteStates[0], colors, spriteWidth, spriteHeight);	
-		
-	}
-
-	public int[] getTiles() {
-		return tiles;
-	}
-
-	// potentially only for main player
 	public void renderSprite(int[] pixels, int x0, int y0, int xScroll, int yScroll, int dir) {
 		int dirState = dir * 2;
 		spriteState = dirState; 
@@ -111,4 +62,5 @@ public class Sprite {
 		}
 	}
 
+	
 }

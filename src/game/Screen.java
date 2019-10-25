@@ -3,6 +3,7 @@ package game;
 import java.util.Random;
 
 import game.sprites.Gator;
+import game.sprites.Tiger;
 import game.tiles.DirtTile;
 import game.tiles.GrassTile;
 
@@ -37,16 +38,6 @@ public class Screen {
 		grass = new GrassTile(sheet);
 		dirt = new DirtTile(sheet);
 		gator = new Gator(sheet);
-		
-		/*
-		for(int y = 5; y < 7; y++) {
-			for(int x = 0; x < 8; x++) {
-				int[][] gatorColors = {{-1, -1, -1}, {35, 49, 196}, {0,0,0}, {35, 49, 196}};
-				sheet.setColors(y * TILE_COUNT + x , gatorColors);
-			}
-		}
-		*/
-		
 		
 		pixels = new int[width * height];
 		tiles = new int[(mapWidth) * (mapWidth)]; //each element represents 8x8p tile
@@ -96,7 +87,21 @@ public class Screen {
 	public void render(int x0, int y0) {
 		for(int y = 0; y < height; y++) {
 			for(int x = 0; x < width; x++) {
-				pixels[x + y * width] = mapPixels[(x + x0 + xScroll) + (y + y0 + yScroll) * mapPixelsWidth];
+				int xCoord = x + x0 + xScroll;
+				int yCoord = y + y0 + yScroll;
+				int mapCoord = (xCoord) + (yCoord) * mapPixelsWidth;
+				
+				//MAP EDGES
+				/*
+				if (mapCoord >= mapPixels.length) {
+					mapCoord -= mapCoord - mapPixels.length;
+				}
+				if (mapCoord < 0) {
+					mapCoord += (-1) * mapCoord;
+				}
+				*/
+				
+				pixels[x + y * width] = mapPixels[mapCoord];
 			} 
 		}
 		
@@ -105,27 +110,7 @@ public class Screen {
 		int centerY = height / 2 - 8;
 		
 		gator.renderSprite(pixels, centerX, centerY, xScroll, yScroll, dir);
-		
 	}
-	
-	/*
-	public void renderSprite(int x0, int y0, int tile) {
-		int tileX = tile % 32;
-		int tileY = tile / 32;
-		int sheetPixel;
-		for(int y = y0; y < (y0 + 8); y++) {
-			for(int x = x0; x < (x0 + 8); x++) {
-				//if (x + y * width < pixels.length - 1) {
-				sheetPixel = sheet.pixels[((tileX * TILE_WIDTH) + (x - x0)) + (SHEET_WIDTH * ((tileY * TILE_WIDTH) + (y - y0)))];
-				if (sheetPixel != -1) { //handling transparency
-					pixels[x + y * width] = sheetPixel;
-				}
-				
-			} 
-		}
-	}
-	*/
-	
 	
 	
 	public void renderMap(int x0, int y0, int tile) {
